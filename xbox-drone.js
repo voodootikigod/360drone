@@ -1,11 +1,12 @@
 var XboxController = require("xbox-controller");
 var arDrone = require('ar-drone');
 var drone = new arDrone.createClient();
+
 var xbox = new XboxController();
 // give your laptop eyes
 
 var http = require("http"),
-    drone = require("dronestream");
+    dronestream = require("dronestream");
 
 
 
@@ -20,8 +21,8 @@ var mapping = {
 	"dleft:press": "left",
 	"dright:press": "right",
 	"back:press": "wave",
-	"x:press": "up",
-	"y:press": "down",
+	"y:press": "up",
+	"x:press": "down",
 	"leftshoulder:press": "flipLeft",
 	"rightshoulder:press": "flipRight"
 };
@@ -33,7 +34,7 @@ xbox.on('start:press', function(position){
 		drone.disableEmergency();
 		drone.takeoff();
 	}
-	this.started = !this.started;
+	INFLIGHT = !INFLIGHT;
 })
 
 
@@ -41,6 +42,7 @@ xbox.on('start:press', function(position){
 for (var e in mapping) {
 	var startAnimation = (function (action) {
 		return function (position) {
+			console.log("start: "+ action);
 			if (typeof drone[action] == "function") {
 				drone[action](1)
 			} else {
@@ -50,6 +52,7 @@ for (var e in mapping) {
 	}(mapping[e]));
 	var stopAnimation = (function (action) { 
 		return function (position) {
+			console.log("stop: "+ action);
 			if (typeof drone[action] == "function") {
 				drone[action](0)
 			}
@@ -67,7 +70,7 @@ var server = http.createServer(function(req, res) {
   require("fs").createReadStream(__dirname + "/index.html").pipe(res);
 });
 
-drone.listen(server);
+dronestream.listen(server);
 server.listen(5555);
 //open up and watch.
 require("child_process").exec("open http://127.0.0.1:5555/");
