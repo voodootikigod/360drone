@@ -14,8 +14,8 @@ var http = require("http"),
 var ANIMATION_LENGTH = 10000;   // in ms
 var INFLIGHT = false;
 var mapping = {
-	"lefttrigger": "counterClockwise",
-	"righttrigger": "clockwise",
+	"leftshoulder:press": "counterClockwise",
+	"rightshoulder:press": "clockwise",
 	"dup:press": "front",
 	"ddown:press": "back",
 	"dleft:press": "left",
@@ -23,8 +23,8 @@ var mapping = {
 	"back:press": "wave",
 	"y:press": "up",
 	"x:press": "down",
-	"leftshoulder:press": "flipLeft",
-	"rightshoulder:press": "flipRight"
+	"lefttrigger": "flipLeft",
+	"righttrigger": "flipRight"
 };
 xbox.on('start:press', function(position){
   if(INFLIGHT) {
@@ -42,6 +42,7 @@ xbox.on('start:press', function(position){
 for (var e in mapping) {
 	var startAnimation = (function (action) {
 		return function (position) {
+			console.log(position);
 			console.log("start: "+ action);
 			if (typeof drone[action] == "function") {
 				console.log("action");
@@ -54,6 +55,7 @@ for (var e in mapping) {
 	}(mapping[e]));
 	var stopAnimation = (function (action) { 
 		return function (position) {
+			console.log(position);
 			console.log("stop: "+ action);
 			if (typeof drone[action] == "function") {
 				console.log("stop action");
