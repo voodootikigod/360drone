@@ -44,8 +44,10 @@ for (var e in mapping) {
 		return function (position) {
 			console.log("start: "+ action);
 			if (typeof drone[action] == "function") {
+				console.log("action");
 				drone[action](1)
 			} else {
+				console.log("animation");
 				drone.animate(action, (action.indexOf("flip") >=0 ? 100 : ANIMATION_LENGTH));
 			}
 		};
@@ -54,7 +56,11 @@ for (var e in mapping) {
 		return function (position) {
 			console.log("stop: "+ action);
 			if (typeof drone[action] == "function") {
+				console.log("stop action");
 				drone[action](0)
+			} else {
+				console.log("stop animation");
+				drone.animate(action, (action.indexOf("flip") >=0 ? 100 : ANIMATION_LENGTH));
 			}
 		};
 	}(mapping[e]));
